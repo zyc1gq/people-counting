@@ -1,12 +1,12 @@
 import socket
 
-def consult(now_num,all_per):
+def consult(now_num,all_per,host):
     s = socket.socket()  # 创建 socket 对象
-    host = '192.168.147.1'  # 获取本地主机名
+    #host = '192.168.147.1'  # 获取本地主机名
     port = 8848  # 设置端口好
 
     s.connect((host, port))
-    s.send((str(now_num)+"|"+str(all_per)))
+    s.send((str(now_num)+"|"+str(all_per)).encode('utf-8'))
     ans = s.recv(1024)
     print(ans)
     if ans == "accept".encode('utf-8'):
@@ -20,5 +20,3 @@ def consult(now_num,all_per):
 
     return "testok"
 
-
-#consult(10)
