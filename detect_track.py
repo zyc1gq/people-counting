@@ -20,8 +20,8 @@ def detect_track(mode):
     global now_per
     global per_in
     global per_out
-    cap = cv2.VideoCapture("C:\\Users\Windows\Pictures\Camera Roll\WIN_20180505_15_13_17_Pro.mp4")
-    face_patterns = cv2.CascadeClassifier('E:\PYC\cascades.xml')
+    cap = cv2.VideoCapture("test.mp4")
+    face_patterns = cv2.CascadeClassifier('cascades.xml')
     vis = True  # 是否调整视频大小
     minsize = 100  # 视频中监测到的最小大小minsize
     par1 = 1.1  # 参数1scaleFactor

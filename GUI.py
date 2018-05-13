@@ -1,12 +1,9 @@
 import tkinter as tk
 #默认一旦开始检测，双机系统就会同时开始检测...不然会很麻烦...双机视频传输，我就先不写了，没时间ORZ
 
-import threading
 from threading import Thread
 import detect_track
 import time
-import num_diss
-import sqllink
 import main
 
 process=[]
@@ -21,11 +18,10 @@ last_per=0
 Client_last_per=0
 
 
-
-
-
 def button_1():#开启一个线程，打开检测程序
     Thread(target=main.main,args=("MAIN_machine","127.0.0.1")).start()
+    #打开Client.py重开线程
+
 
 
 """
@@ -50,8 +46,10 @@ def button_5():#辅机开启
     var=t3.get()
     print(var)
     Thread(target=main.main,args=("SUB_machine",var,)).start()
+    #打开sever的视频端--重开线程
 
-def button_6():#辅机结束
+
+def button_6():#辅机结束，线程停止还没写有点麻烦
     pass
 
 
@@ -60,7 +58,7 @@ def button_6():#辅机结束
 
 window = tk.Tk()
 window.title('counting main window')
-window.geometry('800x600')
+window.geometry('600x400')
 
 # 这里是窗口的内容
 l = tk.Label(window,

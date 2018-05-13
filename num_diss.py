@@ -2,9 +2,6 @@
 #使用端口8848
 #主机端
 
-import sqllink
-import detect_track
-import time
 import socket               # 导入 socket 模块
 Client_num=0
 Client_all=0
@@ -15,11 +12,13 @@ def sever():
     global Client_all
     global com
     s = socket.socket()  # 创建 socket 对象
+    #获得本地IPV4地址
     hostname = socket.gethostname()
     result = socket.getaddrinfo(hostname, None, 0, socket.SOCK_STREAM)
-    host = [x[4][0] for x in result][-1]
-    #host = '192.168.147.1'  # 获取本地主机名
+    host = [x[4][0] for x in result][-2]
+    #host = '10.128.255.190'  # 获取本地主机名
     port = 8848  # 设置端口
+    print(host)
     s.bind((host, port))  # 绑定端口
 
     s.listen(5)  # 等待客户端连接
@@ -34,6 +33,7 @@ def sever():
         Client_num=int(arg_f)
         Client_all=int(arg_t)
         print("Client   "+str(Client_num)+" "+str(Client_all))
+        print("辅机传输成功+1")
         if com=="maintain":#维持原本状态不变
             c.send('accept'.encode("utf-8"))
             c.close()  # 关闭连接

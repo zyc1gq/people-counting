@@ -2,8 +2,8 @@ import _thread
 
 import detect_track
 import time
-import num_diss
-import sqllink
+
+
 import socket
 
 """"
@@ -31,6 +31,7 @@ Client_last_per=0
 #其实还是应该分为两部分，统计当前的和统计总人数
 def changeper(change_pernum):#修改当前人数,每次修改之后需要将主机和附属机器的进出值修改为0？？？
     global base_per
+    import num_diss
     print("ceshiwanc")
     base_per=change_pernum
     detect_track.change_per(0,0)#将进出场人数修改为0，0
@@ -47,6 +48,8 @@ def main(mode,host):
     global all_per
     global last_all_per
     if mode=="MAIN_machine":#主机器主要分为三个进程？？？1.检测；2.用户输入；3.主副通信
+        import sqllink
+        import num_diss
         """
         hostname = socket.gethostname()
         result = socket.getaddrinfo(hostname, None, 0, socket.SOCK_STREAM)
@@ -117,3 +120,4 @@ def main(mode,host):
                     print("副机无法连接主机,请及时查询主机状态")
                 if res=="change":
                     detect_track.change_per(0, 0)
+
