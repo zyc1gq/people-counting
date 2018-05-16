@@ -20,7 +20,9 @@ def detect_track(mode):
     global now_per
     global per_in
     global per_out
-    cap = cv2.VideoCapture("test.mp4")
+    cap = cv2.VideoCapture(1)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
     face_patterns = cv2.CascadeClassifier('cascades.xml')
     vis = True  # 是否调整视频大小
     minsize = 100  # 视频中监测到的最小大小minsize
@@ -31,7 +33,7 @@ def detect_track(mode):
     hight = cap.get(4)
     # 为了可视化好看一点，可以手动替换width和hight为合适的值
     if vis == True:
-        width = 1000
+        width = 1080
         hight = 520
     imgArea = width * hight
     areaTH = imgArea / 250
@@ -70,8 +72,16 @@ def detect_track(mode):
     pts_L4 = pts_L4.reshape((-1, 1, 2))
     persons = []
     pid = 0
+    fps=0
+    now=time.time()
 
-    while (cap.isOpened()):
+    while 1:
+        fps+=1
+        if time.time()-now>=1:
+            print(fps)
+            fps=0
+            now=time.time()
+
 
         #所有的入场就是入场，所有的出场就是出场
         now_per = per_in - per_out
@@ -80,10 +90,13 @@ def detect_track(mode):
         ret, img = cap.read()
 
         try:
-            img = cv2.resize(img, (1000, 520))
+            img = cv2.resize(img, (width, hight))
         except:
             print("测试结束")  # 一般是因为最后一帧无法处理？？？
             break
+
+
+
 
         dets = face_patterns.detectMultiScale(img, scaleFactor=par1, minNeighbors=par2, minSize=(minsize, minsize))
         rects = np.array([[x, y, w, h] for (x, y, w, h) in dets])
@@ -100,7 +113,7 @@ def detect_track(mode):
                 newrec = True
                 if cy in range(up_limit, down_limit):
                     for i in persons:
-                        if abs(cx - i.getX()) <= dw / 2 and abs(cy - i.getY()) <= dh / 2:
+                        if abs(cx - i.getX()) <= dw /2  and abs(cy - i.getY()) <= dh /2 :
                             # el objeto esta cerca de uno que ya se detecto antes
                             newrec = False
                             i.updateCoords(cx, cy)  # actualiza coordenadas en el objeto and resets age
@@ -132,7 +145,7 @@ def detect_track(mode):
         for pla, i in enumerate(persons):
             if i.getY() > down_limit or i.getY() < up_limit:
                 del persons[pla]
-            elif time.time() - i.getSP() >= 0.1:
+            elif time.time() - i.getSP() >= 0.5:
                 del persons[pla]
             else:
                 cv2.putText(img, str(i.getId()), (i.getX(), i.getY()), font, 0.5, i.getRGB(), 1, cv2.LINE_AA)
@@ -166,6 +179,13 @@ def change_per(in_per,out_per):
 
 
 
-#detect_track("MAIN_machine")
+detect_track("MAIN_machine")
 
 
+"""
+        try:
+            img = cv2.resize(img, (1000, 520))
+        except:
+            print("测试结束")  # 一般是因为最后一帧无法处理？？？
+            break
+"""
